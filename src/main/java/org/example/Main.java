@@ -14,7 +14,8 @@ public class Main {
         // 동적
         Test test2 = new Test();
         dynamicSetterMethod(test2, "testStr", str);
-        System.out.println(test2.getTestStr());
+        Object testStr = dynamicGetterMethod(test2, "testStr");
+        System.out.println(testStr);
     }
 
     public static void dynamicSetterMethod(Object obj, String key, String value){
@@ -30,5 +31,18 @@ public class Main {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Object dynamicGetterMethod(Object obj, String key) {
+        Object result = null;
+        try {
+            Class<?> aClass = obj.getClass();
+            String methodName = "get" + key.substring(0, 1).toUpperCase() + key.substring(1);
+            Method method = aClass.getMethod(methodName);
+            result = method.invoke(obj);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
     }
 }
